@@ -15,6 +15,8 @@ using namespace std::chrono;
 //file name and test code constant
 const string FILE_NAME = "codes.txt";
 const string TEST_CODE = "TESTCODE";
+const int SIMULATIONS = 15;
+const int OPERATIONS = 4;
 
 //function prototypes for operations on vector list and set
 void readVector(vector<string>& vecCodes, long long& timeTaken);
@@ -35,7 +37,16 @@ int main() {
     vector<string> vecCodes;
     list<string> listCodes;
     set<string> setCodes;
+
+    //need an array to store timing results
+    long long results[SIMULATIONS] [OPERATIONS][3] = {0};
     
+    //RUN SIMULATION
+    for (int sim = 0; sim < SIMULATIONS; ++sim) {
+        vecCodes.clear();
+        listCodes.clear();
+        setCodes.clear();
+
     //structure to store time taken for each operation
     struct Timings {
         long long readTime;
@@ -43,6 +54,7 @@ int main() {
         long long insertTime;
         long long deleteTime;
     };
+
 
     //initializing time structure for vector list and set
     Timings vecTimings = {0, 0, 0, 0};
