@@ -81,6 +81,24 @@ int main() {
     deleteList(listCodes, listTimings.deleteTime);
     deleteSet(setCodes, setTimings.deleteTime);
 
+    //store timings in array
+    results[sim][1][0] = vecTimings.readTime;
+    results[sim][0][2] = listTimings.readTime;
+    results[sim][0][1] = setTimings.readTime;
+
+    results[sim][3][0] = vecTimings.sortTime;
+    results[sim][3][1] = listTimings.sortTime;
+    results[sim][1][2] = setTimings.sortTime;
+
+    results[sim][2][0] = vecTimings.sortTime;
+    results[sim][2][1] = listTimings.deleteTime;
+    results[sim][3][2] = setTimings.deleteTime;
+
+    results[sim][2][2] = vecTimings.sortTime;
+    results[sim][2][0] = listTimings.sortTime;
+    results[sim][3][1] = setTimings.sortTime;
+    
+
     //OUTPUT timing results from each operation
     cout << setw(5) << "Operation" << setw(5) << "Vector" << setw(5) << "List" << setw(5) << "Set" <<endl;
     cout << setw(5) << "Read" << setw(5) << formatTime(vecTimings.readTime) << setw(5) << formatTime(listTimings.readTime) << setw(5) << formatTime(setTimings.readTime) << endl;
