@@ -39,8 +39,8 @@ int main() {
     list<string> listCodes;
     set<string> setCodes;
     
-    long long results[SIMULATIONS][4][3] = {0}; // this will store the time taken for each operation on each data structure
-    long long avgResults[4][3] = {0}; //to store avg results
+    long long results[SIMULATIONS][4][3] = {{{0}}}; // this will store the time taken for each operation on each data structure
+    long long avgResults[4][3] = {{0}}; //to store avg results
 
     //RUN SIMULATION
     for (int sim = 0; sim < SIMULATIONS; ++sim) {
@@ -86,11 +86,12 @@ int main() {
     calculateAverages(results, avgResults);
   
     //OUTPUT timing results from each operation
+    cout << "Number of simulations: " << SIMULATIONS << endl;
     cout << setw(5) << "Operation" << setw(5) << "Vector" << setw(5) << "List" << setw(5) << "Set" <<endl;
-    cout << setw(5) << "Read" << setw(5) << formatTime(vecTimings.readTime) << setw(5) << formatTime(listTimings.readTime) << setw(5) << formatTime(setTimings.readTime) << endl;
-    cout << setw(5) << "Sort" << setw(5) << formatTime(vecTimings.sortTime) << setw(5) << formatTime(listTimings.sortTime) <<setw(5) << formatTime(setTimings.sortTime) << endl;
-    cout << setw(5) << "Insert" << setw(5) << formatTime(vecTimings.insertTime) << setw(5) << formatTime(listTimings.insertTime) << setw(10) << formatTime(setTimings.insertTime) << endl;
-    cout << setw(5) << "Delete" << setw(5) << formatTime(vecTimings.deleteTime) << setw(10) << formatTime(listTimings.deleteTime) << setw(10) << formatTime(setTimings.deleteTime) << endl;
+    cout << setw(5) << "Read" << setw(5) << formatTime(avgResults[0][0]) << setw(5) <<formatTime(avgResults[0][1]) << setw(5) << formatTime(avgResults[0][2]) << endl;
+    cout << setw(5) << "Sort" << setw(5) << formatTime(avgResults[1][0]) << setw(5) <<formatTime(avgResults[1][1]) << setw(5) <<  "NA" << endl;
+    cout << setw(5) << "Insert" << setw(5) << formatTime(avgResults[2][0]) << setw(5) <<formatTime(avgResults[2][1]) << setw(5) << formatTime(avgResults[2][2]) << endl;
+    cout << setw(5) << "Delete" << setw(5) << formatTime(avgResults[3][0]) << setw(5) <<formatTime(avgResults[3][1]) << setw(5) << formatTime(avgResults[3][2]) << endl;
 
     return 0;
 }
