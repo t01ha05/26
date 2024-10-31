@@ -16,7 +16,7 @@ using namespace std::chrono;
 const string FILE_NAME = "codes.txt";
 const string TEST_CODE = "TESTCODE";
 const int SIMULATIONS = 15;
-const int OPERATIONS = 4;
+
 
 //function prototypes for operations on vector list and set
 void readVector(vector<string>& vecCodes, long long& timeTaken);
@@ -31,29 +31,26 @@ void deleteVector(vector<string>& vecCodes, long long& timeTaken);
 void deleteList (list<string>& listCodes, long long& timeTaken);
 void deleteSet (set<string>& setCodes, long long& timeTaken);
 string formatTime(long long timeTaken);
+void calculateAverages(long long results[SIMULATIONS][4][3], long long avgResults[4][3]);
+
 
 int main() {
-    //containers to store codes from the file
     vector<string> vecCodes;
     list<string> listCodes;
     set<string> setCodes;
-
-    //need an array to store timing results
-    long long results[SIMULATIONS] [OPERATIONS][3] = {0};
     
+    long long results[SIMULATIONS][4][3] = {0}; // this will store the time taken for each operation on each data structure
+    long long avgResults[4][3]
+
     //RUN SIMULATION
     for (int sim = 0; sim < SIMULATIONS; ++sim) {
-        vecCodes.clear();
-        listCodes.clear();
-        setCodes.clear();
 
     //structure to store time taken for each operation
     struct Timings {
-        long long readTime;
-        long long sortTime;
-        long long insertTime;
-        long long deleteTime;
+        long long readTime, sortTime, insertTime, deleteTime;
+
     };
+    
 
 
     //initializing time structure for vector list and set
@@ -64,6 +61,7 @@ int main() {
     //reading data from file to vec list and set
     readList(listCodes, listTimings.readTime);
     readVector(vecCodes, vecTimings.readTime);
+    results[sim][0][0] = vecTimings.readTime; //store vector read time for simulation
     readSet(setCodes, setTimings.readTime);
 
     //sorting vector and list but not set
@@ -76,35 +74,61 @@ int main() {
     insertList(listCodes, listTimings.insertTime);
     insertSet(setCodes, setTimings.insertTime);
 
-    //deleteing middle element from vector list and test code from set
-    deleteVector(vecCodes, vecTimings.deleteTime);
-    deleteList(listCodes, listTimings.deleteTime);
-    deleteSet(setCodes, setTimings.deleteTime);
-
-    //store timings in array
-    results[sim][1][0] = vecTimings.readTime;
-    results[sim][0][2] = listTimings.readTime;
-    results[sim][0][1] = setTimings.readTime;
-
-    results[sim][3][0] = vecTimings.sortTime;
-    results[sim][3][1] = listTimings.sortTime;
-    results[sim][1][2] = setTimings.sortTime;
-
-    results[sim][2][0] = vecTimings.sortTime;
-    results[sim][2][1] = listTimings.deleteTime;
-    results[sim][3][2] = setTimings.deleteTime;
-
-    results[sim][2][2] = vecTimings.sortTime;
-    results[sim][2][0] = listTimings.sortTime;
-    results[sim][3][1] = setTimings.sortTime;
+    readVector(vecCodes, readTime);
+    results[sim][0][0] = readTime;
     
+    readList(listCodes, readTime);
+    results[sim][0][1] = readTime;
+    
+    readSet(setCodes, readTime);
+    results[sim][0][2] = readTime;
+    
+    sortVector(vecCodes, sortTime);
+    results[sim][1][0] = sortTime;
 
+    sortList(listCodes, sortTime);
+    results[sim][1][1] = sortTime;
+
+    sortList(setCodes, sortTime);
+    results[sim][1][2] = sortTime;
+
+    insertVector(vecCodes, insertTime);
+    results[sim][2][0] = insertTime;
+
+    insertList(listCodes, insertTime);
+    results[sim][2][1] = insertTime;
+
+    insertSet(setCodes, insertTime);
+    results[sim][2][2] = insertTime;
+
+    deleteVector(vecCodes, deleteTime);
+    results[sim][3][0] = deleteTime;
+
+    deleteList(listCodes, deleteTime);
+    results[sim][3][1] = deleteTime;
+
+    deleteSet(setCodes, deleteTime);
+    results[sim][3][2] = deleteTime;
+    }
+    
+    void calculateAverages(long long results[SIMULATIONS][4][3], long long avgResults[4][3]) {
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 3; ++j) {
+                long long sum = 0;
+                for (int k = 0; k < SIMULATIONS; ++k) {
+                    sum += results[k][i][j];
+                }
+                avgResults[i][j] = sum / SIMULATIONS;
+            }
+        }
+    }
+    
     //OUTPUT timing results from each operation
     cout << setw(5) << "Operation" << setw(5) << "Vector" << setw(5) << "List" << setw(5) << "Set" <<endl;
     cout << setw(5) << "Read" << setw(5) << formatTime(vecTimings.readTime) << setw(5) << formatTime(listTimings.readTime) << setw(5) << formatTime(setTimings.readTime) << endl;
     cout << setw(5) << "Sort" << setw(5) << formatTime(vecTimings.sortTime) << setw(5) << formatTime(listTimings.sortTime) <<setw(5) << formatTime(setTimings.sortTime) << endl;
     cout << setw(5) << "Insert" << setw(5) << formatTime(vecTimings.insertTime) << setw(5) << formatTime(listTimings.insertTime) << setw(10) << formatTime(setTimings.insertTime) << endl;
-    cout << setw(5) << "Delete" << setw(5) << formatTime(vecTimings.deleteTime) << setw(5) << formatTime(listTimings.deleteTime) << setw(10) << formatTime(setTimings.deleteTime) << endl;
+    cout << setw(5) << "Delete" << setw(5) << formatTime(vecTimings.deleteTime) << setw(10) << formatTime(listTimings.deleteTime) << setw(10) << formatTime(setTimings.deleteTime) << endl;
 
     return 0;
 }
