@@ -40,39 +40,11 @@ int main() {
     set<string> setCodes;
     
     long long results[SIMULATIONS][4][3] = {0}; // this will store the time taken for each operation on each data structure
-    long long avgResults[4][3]
+    long long avgResults[4][3] = {0}; //to store avg results
 
     //RUN SIMULATION
     for (int sim = 0; sim < SIMULATIONS; ++sim) {
-
-    //structure to store time taken for each operation
-    struct Timings {
         long long readTime, sortTime, insertTime, deleteTime;
-
-    };
-    
-
-
-    //initializing time structure for vector list and set
-    Timings vecTimings = {0, 0, 0, 0};
-    Timings listTimings = {0, 0, 0, 0};
-    Timings setTimings = {0, 0, 0 ,0};
-
-    //reading data from file to vec list and set
-    readList(listCodes, listTimings.readTime);
-    readVector(vecCodes, vecTimings.readTime);
-    results[sim][0][0] = vecTimings.readTime; //store vector read time for simulation
-    readSet(setCodes, setTimings.readTime);
-
-    //sorting vector and list but not set
-    sortList(listCodes, listTimings.sortTime);
-    sortVector(vecCodes, vecTimings.sortTime);
-    setTimings.sortTime = -1;
-
-    //inserting test code into middle of vector list and set
-    insertVector(vecCodes, vecTimings.insertTime);
-    insertList(listCodes, listTimings.insertTime);
-    insertSet(setCodes, setTimings.insertTime);
 
     readVector(vecCodes, readTime);
     results[sim][0][0] = readTime;
@@ -89,8 +61,7 @@ int main() {
     sortList(listCodes, sortTime);
     results[sim][1][1] = sortTime;
 
-    sortList(setCodes, sortTime);
-    results[sim][1][2] = sortTime;
+    results[sim][1][2] = -1;
 
     insertVector(vecCodes, insertTime);
     results[sim][2][0] = insertTime;
@@ -109,20 +80,11 @@ int main() {
 
     deleteSet(setCodes, deleteTime);
     results[sim][3][2] = deleteTime;
+   
     }
     
-    void calculateAverages(long long results[SIMULATIONS][4][3], long long avgResults[4][3]) {
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 3; ++j) {
-                long long sum = 0;
-                for (int k = 0; k < SIMULATIONS; ++k) {
-                    sum += results[k][i][j];
-                }
-                avgResults[i][j] = sum / SIMULATIONS;
-            }
-        }
-    }
-    
+    calculateAverages(results, avgResults);
+  
     //OUTPUT timing results from each operation
     cout << setw(5) << "Operation" << setw(5) << "Vector" << setw(5) << "List" << setw(5) << "Set" <<endl;
     cout << setw(5) << "Read" << setw(5) << formatTime(vecTimings.readTime) << setw(5) << formatTime(listTimings.readTime) << setw(5) << formatTime(setTimings.readTime) << endl;
@@ -142,7 +104,6 @@ void readVector(vector<string>& vecCodes, long long& timeTaken) {
         exit(1); //exit if cannot be opened
 
     }
-
     string code;
     auto start = high_resolution_clock::now(); //start time
     while (getline(inFile, code)) {
@@ -154,7 +115,6 @@ void readVector(vector<string>& vecCodes, long long& timeTaken) {
     inFile.close(); //close the file
 }
 
-//
 void readList(list<string>& listCodes, long long& timeTaken){
     ifstream inFile(FILE_NAME);
 
@@ -250,16 +210,15 @@ void deleteVector (vector<string>& vecCodes, long long& timeTaken) {
 void deleteList (list<string>& listCodes, long long& timeTaken) {
     auto it = listCodes.begin();
     advance(it, listCodes.size() / 2);
-
     auto start = high_resolution_clock::now();
     if (it != listCodes.end()) {
         listCodes.erase(it);
     }
+    auto end = high_resolution_clock::now();
+    timeTaken = duration_cast<microseconds>(end - start).count();
 }
 
-
 //add delete functions 
-
 void deleteSet(set<string>& setCodes, long long& timeTaken) {
     auto start = high_resolution_clock::now();
     setCodes.erase(TEST_CODE);
@@ -274,3 +233,14 @@ string formatTime(long long timeTaken) {
     else
         return to_string(timeTaken) + " ms";
 }
+  void calculateAverages(long long results[SIMULATIONS][4][3], long long avgResults[4][3]) {
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 3; ++j) {
+                long long sum = 0;
+                for (int k = 0; k < SIMULATIONS; ++k) {
+                    sum += results[k][i][j];
+                }
+                avgResults[i][j] = sum / SIMULATIONS;
+            }
+        }
+    }
