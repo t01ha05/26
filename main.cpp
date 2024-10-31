@@ -87,11 +87,11 @@ int main() {
   
     //OUTPUT timing results from each operation
     cout << "Number of simulations: " << SIMULATIONS << endl;
-    cout << setw(5) << "Operation" << setw(5) << "Vector" << setw(5) << "List" << setw(5) << "Set" <<endl;
-    cout << setw(5) << "Read" << setw(5) << formatTime(avgResults[0][0]) << setw(5) <<formatTime(avgResults[0][1]) << setw(5) << formatTime(avgResults[0][2]) << endl;
-    cout << setw(5) << "Sort" << setw(5) << formatTime(avgResults[1][0]) << setw(5) <<formatTime(avgResults[1][1]) << setw(5) <<  "NA" << endl;
-    cout << setw(5) << "Insert" << setw(5) << formatTime(avgResults[2][0]) << setw(5) <<formatTime(avgResults[2][1]) << setw(5) << formatTime(avgResults[2][2]) << endl;
-    cout << setw(5) << "Delete" << setw(5) << formatTime(avgResults[3][0]) << setw(5) <<formatTime(avgResults[3][1]) << setw(5) << formatTime(avgResults[3][2]) << endl;
+    cout << setw(10) << "Operation" << setw(10) << "Vector" << setw(10) << "List" << setw(10) << "Set" <<endl;
+    cout << setw(10) << "Read" << setw(10) << formatTime(avgResults[0][0]) << setw(10) <<formatTime(avgResults[0][1]) << setw(10) << formatTime(avgResults[0][2]) << endl;
+    cout << setw(10) << "Sort" << setw(10) << formatTime(avgResults[1][0]) << setw(10) <<formatTime(avgResults[1][1]) << setw(10) <<  "NA" << endl;
+    cout << setw(10) << "Insert" << setw(10) << formatTime(avgResults[2][0]) << setw(10) <<formatTime(avgResults[2][1]) << setw(10) << formatTime(avgResults[2][2]) << endl;
+    cout << setw(10) << "Delete" << setw(10) << formatTime(avgResults[3][0]) << setw(10) <<formatTime(avgResults[3][1]) << setw(10) << formatTime(avgResults[3][2]) << endl;
 
     return 0;
 }
@@ -171,10 +171,6 @@ void sortList(list<string>& listCodes, long long& timeTaken){
 }
 void insertVector(vector<string>& vecCodes, long long& timeTaken){
     size_t midPos = vecCodes.size() / 2;
-
-    if(vecCodes.empty()) {
-        midPos = vecCodes.size();
-    }
     auto start = high_resolution_clock::now();
     vecCodes.insert(vecCodes.begin() + midPos, TEST_CODE);
     auto end = high_resolution_clock::now();
